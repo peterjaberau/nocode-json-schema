@@ -1,0 +1,1 @@
+export { default } from '../../../../../../packages/plugins/@nocobase-sample/plugin-workflow-json-extract/src/client';

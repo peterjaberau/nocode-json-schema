@@ -1,0 +1,1 @@
+export { default } from '@nocobase/plugin-auth-sms/client';

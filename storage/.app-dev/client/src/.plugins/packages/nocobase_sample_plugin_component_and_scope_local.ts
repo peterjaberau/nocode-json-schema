@@ -1,0 +1,1 @@
+export { default } from '@nocobase-sample/plugin-component-and-scope-local/client';

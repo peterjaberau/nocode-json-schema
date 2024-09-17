@@ -1,0 +1,1 @@
+export { default } from '@nocobase-sample/plugin-settings-table-multiple-forms/client';

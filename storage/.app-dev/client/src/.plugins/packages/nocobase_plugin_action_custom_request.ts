@@ -1,0 +1,1 @@
+export { default } from '@nocobase/plugin-action-custom-request/client';

@@ -1,0 +1,1 @@
+export { default } from '@mybricks/cloud-com/client';

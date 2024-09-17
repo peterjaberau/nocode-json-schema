@@ -1,0 +1,304 @@
+@startuml
+title SPECGL | IPND Processes (AAPT)
+actor CombinedActor as "Processes"
+
+participant BPA as "BPA System"
+participant BPEL as "BPEL System"
+participant IPNDGate as "IPND Gate System"
+participant IPNDBroker as "IPND Broker System"
+participant IPND as "IPND System"
+participant DataProvider as "Data Provider"
+participant WholesaleCSP as "Wholesale/CSP"
+actor Teams as "Teams"
+
+== Daily Feed Operation Process ==
+note left of CombinedActor: Rego System
+CombinedActor -> BPA: Submits Order to BPA
+note left of CombinedActor: Frontier System
+CombinedActor -> BPEL: Submits Order to BPEL
+BPA -> IPNDGate: Sends Data to IPND Gate
+BPEL -> IPNDGate: Sends Data to IPND Gate
+IPNDGate -> IPNDBroker: Transfers Daily Feed
+IPNDBroker -> IPND: Sends Feed to IPND
+IPND -> IPNDBroker: Sends Feedback and .err Files
+IPNDBroker -> IPNDGate: Processes Errors
+
+== Monthly Change Data Provider (CDP) Process ==
+note left of CombinedActor: External IPND System
+CombinedActor -> IPNDBroker: Generates and Transfers CDP File
+IPNDBroker -> DataProvider: Sends CDP File
+DataProvider -> Teams: Raise Ticket, Investigate Errors
+note right of Teams: Provisioning Team
+
+== Half-Yearly Reconciliation Process ==
+note left of CombinedActor: External IPND System
+CombinedActor -> IPNDBroker: Generates and Transfers Half-Yearly Data
+IPNDBroker -> DataProvider: Sends Half-Yearly Extract Files
+DataProvider -> Teams: Investigate Discrepancies, Notify
+note right of Teams: Provisioning Team
+Teams -> DataProvider: Handle Corrective Actions
+DataProvider -> IPNDBroker: Consolidate Results, Generate Reports
+IPNDBroker -> DataProvider: Send Report
+
+== Quarterly IPND Wholesale (CSP) Report Process ==
+note left of CombinedActor: External IPND System
+CombinedActor -> IPNDBroker: Generates Quarterly IPND Extract Files
+IPNDBroker -> DataProvider: Retrieve and Extract Quarterly IPND Files
+DataProvider -> Teams: Notify BI Team [EMAIL & JIRA]
+note right of Teams: BI Team
+Teams -> DataProvider: Receive Matched Records and Make Extract Available in Frontier DB
+DataProvider -> WholesaleCSP: Download Extract and Process Reconciliation
+WholesaleCSP -> CombinedActor: Submit Corrective Actions
+@enduml
+
+
+=======================
+
+
+
+@startuml
+
+title AGILEP | IPND Processes (Internode - SNBS)
+
+
+actor CombinedActor as "Processes"
+
+participant IPNDManager as "IPND Manager (System)"
+participant IPNDBroker as "IPND Broker (System)"
+participant IPND as "IPND System"
+participant DataProvider as "Data Provider (DP)"
+actor Teams as "Teams (Provisioning)"
+
+== Daily Feed Operation Process ==
+note left of CombinedActor: SNBS System
+CombinedActor -> IPNDBroker: Sends IPND file
+IPNDBroker -> IPND: Sends IPND file to IPND
+IPND -> IPNDBroker: Generates and Sends .err file
+IPNDBroker -> DataProvider: Sends .err file
+DataProvider -> Teams: Extract and Take corrective actions [SNBS]
+note right of Teams: Provisioning Team
+
+== Monthly Change Data Provider (CDP) Process ==
+note left of CombinedActor: External IPND System
+CombinedActor -> DataProvider: Sends IPND file for the month [EMAIL]
+DataProvider -> DataProvider: Receive and Process IPND file [SNBS]
+DataProvider -> DataProvider: Generate and Send IPND CDP Reports [SNBS]
+DataProvider -> Teams: Receives Reports and Take corrective actions [SYSTEM]
+note right of Teams: Provisioning Team
+
+== Quarterly Reconciliation Process ==
+note left of CombinedActor: External IPND System
+CombinedActor -> IPNDBroker: Sends IPND audit files
+IPNDBroker -> IPNDBroker: Receives IPND audit files
+IPNDBroker -> DataProvider: Downloads quarterly IPND audit files
+DataProvider -> DataProvider: Generate IPND files and Process Reconciliation [SNBS]
+DataProvider -> Teams: Create and Store Quarterly Reconciliation Report [JIRA]
+note right of Teams: Provisioning Team
+@enduml
+
+
+
+
+
+===============
+
+
+
+
+@startuml
+title TRNACT | IPND Operation Processes (iiNet Rumba)
+
+
+actor CombinedActor as "Processes"
+
+participant IPNDManager as "IPND Manager (System)"
+participant IPNDBroker as "IPND Broker (System)"
+participant IPND as "IPND System"
+participant DataProvider as "Data Provider (DP)"
+participant CSR as "CSR Team"
+actor Teams as "Teams (Provisioning)"
+
+== Daily Feed Operation Process ==
+note left of CombinedActor: TRNACT System
+CombinedActor -> DataProvider: Runs scripts to generate IPND files
+DataProvider -> IPNDBroker: Generate IPND files for upload
+IPNDBroker -> IPND: Upload IPND files to IPND System
+IPND -> DataProvider: Generate .err files and send to Data Provider
+DataProvider -> Teams: Take corrective actions [OMNI/CANMAN]
+note right of Teams: CSR
+
+== Monthly Mini Reconciliation Process ==
+note left of CombinedActor: TRNACT System
+CombinedActor -> DataProvider: Load unloaded IPNDUP files
+DataProvider -> DataProvider: Load IPND snapshot and Generate report
+DataProvider -> DataProvider: Compare sent vs should be sent IPND files
+DataProvider -> Teams: Take corrective actions and resend [IPND]
+note right of Teams: Provisioning Team
+
+== Monthly Change Data Provider (CDP) Process ==
+note left of CombinedActor: IPND Manager System
+CombinedActor -> IPNDBroker: Sends IPND CDP Report
+IPNDBroker -> DataProvider: Receives CDP report
+DataProvider -> Teams: Download and send IPND CDP Reports to Support [TRANSACT]
+note right of Teams: CSR \ Frontline Agent
+Teams -> DataProvider: Compare reports and create summary of findings
+DataProvider -> Teams: Take corrective actions and submit [TRANSACT]
+
+== Half-Yearly Reconciliation Process ==
+note left of CombinedActor: External IPND System
+CombinedActor -> IPNDBroker: Upload IPNDRU files for reconciliation
+IPNDBroker -> DataProvider: Import IPND files into database [TRANSACT]
+DataProvider -> Teams: Request service numbers for reconciliation [KENAN/RUMBA]
+Teams -> DataProvider: Compare results
+DataProvider -> Teams: Take corrective actions [OMNI]
+Teams -> CSR: Investigate and fix discrepancies
+DataProvider -> Teams: Create Half-Yearly Reconciliation Report
+
+
+@enduml
+
+
+
+
+========================
+
+
+
+
+
+
+
+
+@startuml
+title CHICOM IPND Processes (iiNet - Rumba)
+
+actor CombinedActor as "Processes"
+participant IPNDManager as "IPND Manager (System)"
+participant IPNDBroker as "IPND Broker (System)"
+participant Rumba as "Rumba (System)"
+participant DataProvider as "Data Provider (DP)"
+actor Teams as "Teams (BI, CSR, Frontline)"
+
+== Daily Feed Operation Process ==
+note left of CombinedActor: Rumba System
+CombinedActor -> IPNDBroker: Send IPND file to IPND Broker
+IPNDBroker -> Rumba: Send .err file for investigation
+Rumba -> DataProvider: Extract .err file and take corrective actions [Rumba]
+DataProvider -> Teams: Send ticket for investigation [JIRA]
+note right of Teams: CSR Team
+Teams -> DataProvider: Close ticket and notify [JIRA]
+
+== Monthly Change Data Provider (CDP) Process ==
+note left of CombinedActor: IPND Manager System
+CombinedActor -> IPNDBroker: Sends IPND file to IPND Broker
+IPNDBroker -> Rumba: Send IPND file to Rumba
+Rumba -> DataProvider: Generate and upload ticket [JIRA]
+DataProvider -> Teams: Send IPND CDP reports
+note right of Teams: CSR Team
+Teams -> DataProvider: Investigate and take corrective actions for incorrect losses/gains
+Teams -> DataProvider: Notify of completion and close ticket [JIRA]
+
+== Quarterly Reconciliation Process ==
+note left of CombinedActor: IPND Manager System
+CombinedActor -> IPNDBroker: Sends IPND audit files to IPND Broker
+IPNDBroker -> DataProvider: Run reconciliation process [Rumba]
+DataProvider -> Teams: Take corrective actions for discrepancies
+note right of Teams: CSR Team
+Teams -> DataProvider: Notify of corrective actions completion [JIRA]
+Teams -> IPNDManager: Create and submit reconciliation report [BI, JIRA]
+note right of Teams: BI Team
+@enduml
+
+
+=======================
+
+
+
+@startuml
+title TPGINT | IPND Operation Processes (IAS)
+
+actor CombinedActor as "Processes"
+participant IPNDManager as "IPND Manager (System)"
+participant IPNDBroker as "IPND Broker (System)"
+participant IPND as "IPND System"
+participant IAS as "IAS System"
+participant DataProvider as "Data Provider (DP)"
+actor Teams as "Teams (Provisioning, CSR)"
+
+== Daily Feed Operation Process ==
+note left of CombinedActor: IAS System
+CombinedActor -> IPNDManager: Send IPND file to IPND Manager
+IPNDManager -> IPND: Receive and generate .err file
+IPND -> IAS: Send .err file for investigation
+IAS -> DataProvider: Extract .err file and take corrective actions
+DataProvider -> Teams: Handle soft/hard errors and notify COPS
+note right of Teams: CSR Team
+Teams -> DataProvider: Notify of completion and close ticket [EMAIL]
+
+== Monthly Change Data Provider (CDP) Process ==
+note left of CombinedActor: IPND Manager System
+CombinedActor -> IPNDBroker: Sends IPND file for the month
+IPNDBroker -> IAS: Run report generation scripts [IAS]
+IAS -> DataProvider: Generate IPND CDP Reports
+DataProvider -> Teams: Investigate and take corrective actions for discrepancies
+Teams -> DataProvider: Notify completion, resend records to IPND, and close ticket
+note right of Teams: Provisioning Team
+
+== Half-Yearly Reconciliation Process ==
+note left of CombinedActor: IPND Manager System
+CombinedActor -> IPNDBroker: Sends Half-Yearly IPND Extract files
+IPNDBroker -> IAS: Compare file against IAS records
+IAS -> DataProvider: Modify records and resend to IPND
+DataProvider -> Teams: Take corrective actions, notify, and close reconciliation
+Teams -> IPNDManager: Create and submit reconciliation report
+note right of Teams: BI Team
+
+@enduml
+
+
+
+
+==========================
+
+@startuml
+title IPND Siebel Feed and CDP Reconciliation Process
+
+participant Siebel
+participant ETL
+participant IPND
+participant Telstra
+actor Teams as "Teams (Siebel L2, ETL L2, COPS Admin)"
+
+== Siebel Daily Feed Operation ==
+note left of Siebel: Start
+Siebel -> ETL: Extract and validate customer data
+
+ETL -> ETL: Process and validate IPND data
+ETL -> IPND: Upload validated records to IPND
+
+IPND -> Telstra: process IPND files to Telstra
+
+Telstra -> IPND: Receive error .err files
+IPND -> ETL: Download IPND .err files
+ETL -> Teams: share ETL and IPND errors relevant teams
+note right of Teams: Siebel L2
+Teams -> Siebel: Fix hard errors and create PKE for hard errors that cannot be fixed
+note right of Teams: COPS Admin
+Teams -> Siebel: Correct erros and contact customer if required
+
+
+== CDP Monthly Reconciliation Process ==
+IPND -> ETL: Download CDP file from IPND\Telstra
+note right of Teams: Start \ Siebel L2
+Teams -> ETL: Download CDP files
+Teams -> Siebel: prepare reconciliation summary
+Siebel -> IPND: Resubmit customer data to IPND
+note right of Teams: Siebel L2
+Teams -> ETL: Verify second day reconsiliation report
+Teams -> Siebel: Verify second day reconsiliation report
+Teams -> Teams: Share reconsiliation report with VHA
+note right of Teams: VHA Service Manager
+Teams -> IPND: Submit report to IPND
+
+
+@enduml

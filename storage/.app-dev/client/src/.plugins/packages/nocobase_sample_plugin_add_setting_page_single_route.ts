@@ -1,0 +1,1 @@
+export { default } from '@nocobase-sample/plugin-add-setting-page-single-route/client';

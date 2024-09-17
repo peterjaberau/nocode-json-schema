@@ -1,0 +1,24 @@
+2024-09-13T21:22:43: PM2 log: ===============================================================================
+2024-09-13T21:22:43: PM2 log: --- New PM2 Daemon started ----------------------------------------------------
+2024-09-13T21:22:43: PM2 log: Time                 : Fri Sep 13 2024 21:22:43 GMT+1000 (Australian Eastern Standard Time)
+2024-09-13T21:22:43: PM2 log: PM2 version          : 5.3.1
+2024-09-13T21:22:43: PM2 log: Node.js version      : 22.7.0
+2024-09-13T21:22:43: PM2 log: Current arch         : arm64
+2024-09-13T21:22:43: PM2 log: PM2 home             : /Users/peterjaber/Desktop/Easyflow.io/Code/nocobase-samples/storage/.pm2
+2024-09-13T21:22:43: PM2 log: PM2 PID file         : /Users/peterjaber/Desktop/Easyflow.io/Code/nocobase-samples/storage/.pm2/pm2.pid
+2024-09-13T21:22:43: PM2 log: RPC socket file      : /Users/peterjaber/Desktop/Easyflow.io/Code/nocobase-samples/storage/.pm2/rpc.sock
+2024-09-13T21:22:43: PM2 log: BUS socket file      : /Users/peterjaber/Desktop/Easyflow.io/Code/nocobase-samples/storage/.pm2/pub.sock
+2024-09-13T21:22:43: PM2 log: Application log path : /Users/peterjaber/Desktop/Easyflow.io/Code/nocobase-samples/storage/.pm2/logs
+2024-09-13T21:22:43: PM2 log: Worker Interval      : 30000
+2024-09-13T21:22:43: PM2 log: Process dump file    : /Users/peterjaber/Desktop/Easyflow.io/Code/nocobase-samples/storage/.pm2/dump.pm2
+2024-09-13T21:22:43: PM2 log: Concurrent actions   : 2
+2024-09-13T21:22:43: PM2 log: SIGTERM timeout      : 1600
+2024-09-13T21:22:43: PM2 log: ===============================================================================
+2024-09-14T21:22:45: PM2 log: [PM2] This PM2 is not UP TO DATE
+2024-09-14T21:22:45: PM2 log: [PM2] Upgrade to version 5.4.2
+2024-09-15T21:22:45: PM2 log: [PM2] This PM2 is not UP TO DATE
+2024-09-15T21:22:45: PM2 log: [PM2] Upgrade to version 5.4.2
+2024-09-16T21:22:45: PM2 log: [PM2] This PM2 is not UP TO DATE
+2024-09-16T21:22:45: PM2 log: [PM2] Upgrade to version 5.4.2
+2024-09-17T21:22:45: PM2 log: [PM2] This PM2 is not UP TO DATE
+2024-09-17T21:22:45: PM2 log: [PM2] Upgrade to version 5.4.2

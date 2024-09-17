@@ -1,0 +1,819 @@
+{
+  "SPECGL": {
+    "title": "SPECGL | IPND Processes (AAPT)",
+    "actors": {
+      "CombinedActor": "Processes",
+      "Teams": "Teams"
+    },
+    "participants": {
+      "BPA": "BPA System",
+      "BPEL": "BPEL System",
+      "IPNDGate": "IPND Gate System",
+      "IPNDBroker": "IPND Broker System",
+      "IPND": "IPND System",
+      "DataProvider": "Data Provider",
+      "WholesaleCSP": "Wholesale/CSP"
+    },
+    "processes": [
+      {
+        "name": "Daily Feed Operation Process",
+        "steps": [
+          {
+            "note": "Rego System",
+            "from": "CombinedActor",
+            "to": "BPA",
+            "action": "Submits Order to BPA"
+          },
+          {
+            "note": "Frontier System",
+            "from": "CombinedActor",
+            "to": "BPEL",
+            "action": "Submits Order to BPEL"
+          },
+          {
+            "from": "BPA",
+            "to": "IPNDGate",
+            "action": "Sends Data to IPND Gate"
+          },
+          {
+            "from": "BPEL",
+            "to": "IPNDGate",
+            "action": "Sends Data to IPND Gate"
+          },
+          {
+            "from": "IPNDGate",
+            "to": "IPNDBroker",
+            "action": "Transfers Daily Feed"
+          },
+          {
+            "from": "IPNDBroker",
+            "to": "IPND",
+            "action": "Sends Feed to IPND"
+          },
+          {
+            "from": "IPND",
+            "to": "IPNDBroker",
+            "action": "Sends Feedback and .err Files"
+          },
+          {
+            "from": "IPNDBroker",
+            "to": "IPNDGate",
+            "action": "Processes Errors"
+          }
+        ]
+      },
+      {
+        "name": "Monthly Change Data Provider (CDP) Process",
+        "steps": [
+          {
+            "note": "External IPND System",
+            "from": "CombinedActor",
+            "to": "IPNDBroker",
+            "action": "Generates and Transfers CDP File"
+          },
+          {
+            "from": "IPNDBroker",
+            "to": "DataProvider",
+            "action": "Sends CDP File"
+          },
+          {
+            "from": "DataProvider",
+            "to": "Teams",
+            "action": "Raise Ticket, Investigate Errors"
+          },
+          {
+            "note": "Provisioning Team"
+          }
+        ]
+      },
+      {
+        "name": "Half-Yearly Reconciliation Process",
+        "steps": [
+          {
+            "note": "External IPND System",
+            "from": "CombinedActor",
+            "to": "IPNDBroker",
+            "action": "Generates and Transfers Half-Yearly Data"
+          },
+          {
+            "from": "IPNDBroker",
+            "to": "DataProvider",
+            "action": "Sends Half-Yearly Extract Files"
+          },
+          {
+            "from": "DataProvider",
+            "to": "Teams",
+            "action": "Investigate Discrepancies, Notify"
+          },
+          {
+            "note": "Provisioning Team"
+          },
+          {
+            "from": "Teams",
+            "to": "DataProvider",
+            "action": "Handle Corrective Actions"
+          },
+          {
+            "from": "DataProvider",
+            "to": "IPNDBroker",
+            "action": "Consolidate Results, Generate Reports"
+          },
+          {
+            "from": "IPNDBroker",
+            "to": "DataProvider",
+            "action": "Send Report"
+          }
+        ]
+      },
+      {
+        "name": "Quarterly IPND Wholesale (CSP) Report Process",
+        "steps": [
+          {
+            "note": "External IPND System",
+            "from": "CombinedActor",
+            "to": "IPNDBroker",
+            "action": "Generates Quarterly IPND Extract Files"
+          },
+          {
+            "from": "IPNDBroker",
+            "to": "DataProvider",
+            "action": "Retrieve and Extract Quarterly IPND Files"
+          },
+          {
+            "from": "DataProvider",
+            "to": "Teams",
+            "action": "Notify BI Team [EMAIL & JIRA]"
+          },
+          {
+            "note": "BI Team"
+          },
+          {
+            "from": "Teams",
+            "to": "DataProvider",
+            "action": "Receive Matched Records and Make Extract Available in Frontier DB"
+          },
+          {
+            "from": "DataProvider",
+            "to": "WholesaleCSP",
+            "action": "Download Extract and Process Reconciliation"
+          },
+          {
+            "from": "WholesaleCSP",
+            "to": "CombinedActor",
+            "action": "Submit Corrective Actions"
+          }
+        ]
+      }
+    ]
+  },
+
+  "AGILEP": {
+    "title": "AGILEP | IPND Processes (Internode - SNBS)",
+    "actors": {
+      "CombinedActor": "Processes",
+      "Teams": "Teams (Provisioning)"
+    },
+    "participants": {
+      "IPNDManager": "IPND Manager (System)",
+      "IPNDBroker": "IPND Broker (System)",
+      "IPND": "IPND System",
+      "DataProvider": "Data Provider (DP)"
+    },
+    "processes": [
+      {
+        "name": "Daily Feed Operation Process",
+        "steps": [
+          {
+            "note": "SNBS System",
+            "from": "CombinedActor",
+            "to": "IPNDBroker",
+            "action": "Sends IPND file"
+          },
+          {
+            "from": "IPNDBroker",
+            "to": "IPND",
+            "action": "Sends IPND file to IPND"
+          },
+          {
+            "from": "IPND",
+            "to": "IPNDBroker",
+            "action": "Generates and Sends .err file"
+          },
+          {
+            "from": "IPNDBroker",
+            "to": "DataProvider",
+            "action": "Sends .err file"
+          },
+          {
+            "from": "DataProvider",
+            "to": "Teams",
+            "action": "Extract and Take corrective actions [SNBS]"
+          },
+          {
+            "note": "Provisioning Team"
+          }
+        ]
+      },
+      {
+        "name": "Monthly Change Data Provider (CDP) Process",
+        "steps": [
+          {
+            "note": "External IPND System",
+            "from": "CombinedActor",
+            "to": "DataProvider",
+            "action": "Sends IPND file for the month [EMAIL]"
+          },
+          {
+            "from": "DataProvider",
+            "to": "DataProvider",
+            "action": "Receive and Process IPND file [SNBS]"
+          },
+          {
+            "from": "DataProvider",
+            "to": "DataProvider",
+            "action": "Generate and Send IPND CDP Reports [SNBS]"
+          },
+          {
+            "from": "DataProvider",
+            "to": "Teams",
+            "action": "Receives Reports and Take corrective actions [SYSTEM]"
+          },
+          {
+            "note": "Provisioning Team"
+          }
+        ]
+      },
+      {
+        "name": "Quarterly Reconciliation Process",
+        "steps": [
+          {
+            "note": "External IPND System",
+            "from": "CombinedActor",
+            "to": "IPNDBroker",
+            "action": "Sends IPND audit files"
+          },
+          {
+            "from": "IPNDBroker",
+            "to": "IPNDBroker",
+            "action": "Receives IPND audit files"
+          },
+          {
+            "from": "IPNDBroker",
+            "to": "DataProvider",
+            "action": "Downloads quarterly IPND audit files"
+          },
+          {
+            "from": "DataProvider",
+            "to": "DataProvider",
+            "action": "Generate IPND files and Process Reconciliation [SNBS]"
+          },
+          {
+            "from": "DataProvider",
+            "to": "Teams",
+            "action": "Create and Store Quarterly Reconciliation Report [JIRA]"
+          },
+          {
+            "note": "Provisioning Team"
+          }
+        ]
+      }
+    ]
+  },
+
+  "CHICOM": {
+    "title": "CHICOM IPND Processes (iiNet - Rumba)",
+    "actors": {
+      "CombinedActor": "Processes",
+      "Teams": "Teams (BI, CSR, Frontline)"
+    },
+    "participants": {
+      "IPNDManager": "IPND Manager (System)",
+      "IPNDBroker": "IPND Broker (System)",
+      "Rumba": "Rumba (System)",
+      "DataProvider": "Data Provider (DP)"
+    },
+    "processes": [
+      {
+        "name": "Daily Feed Operation Process",
+        "steps": [
+          {
+            "note": "Rumba System",
+            "from": "CombinedActor",
+            "to": "IPNDBroker",
+            "action": "Send IPND file to IPND Broker"
+          },
+          {
+            "from": "IPNDBroker",
+            "to": "Rumba",
+            "action": "Send .err file for investigation"
+          },
+          {
+            "from": "Rumba",
+            "to": "DataProvider",
+            "action": "Extract .err file and take corrective actions [Rumba]"
+          },
+          {
+            "from": "DataProvider",
+            "to": "Teams",
+            "action": "Send ticket for investigation [JIRA]"
+          },
+          {
+            "note": "CSR Team"
+          },
+          {
+            "from": "Teams",
+            "to": "DataProvider",
+            "action": "Close ticket and notify [JIRA]"
+          }
+        ]
+      },
+      {
+        "name": "Monthly Change Data Provider (CDP) Process",
+        "steps": [
+          {
+            "note": "IPND Manager System",
+            "from": "CombinedActor",
+            "to": "IPNDBroker",
+            "action": "Sends IPND file to IPND Broker"
+          },
+          {
+            "from": "IPNDBroker",
+            "to": "Rumba",
+            "action": "Send IPND file to Rumba"
+          },
+          {
+            "from": "Rumba",
+            "to": "DataProvider",
+            "action": "Generate and upload ticket [JIRA]"
+          },
+          {
+            "from": "DataProvider",
+            "to": "Teams",
+            "action": "Send IPND CDP reports"
+          },
+          {
+            "note": "CSR Team"
+          },
+          {
+            "from": "Teams",
+            "to": "DataProvider",
+            "action": "Investigate and take corrective actions for incorrect losses/gains"
+          },
+          {
+            "from": "Teams",
+            "to": "DataProvider",
+            "action": "Notify of completion and close ticket [JIRA]"
+          }
+        ]
+      },
+      {
+        "name": "Quarterly Reconciliation Process",
+        "steps": [
+          {
+            "note": "IPND Manager System",
+            "from": "CombinedActor",
+            "to": "IPNDBroker",
+            "action": "Sends IPND audit files to IPND Broker"
+          },
+          {
+            "from": "IPNDBroker",
+            "to": "DataProvider",
+            "action": "Run reconciliation process [Rumba]"
+          },
+          {
+            "from": "DataProvider",
+            "to": "Teams",
+            "action": "Take corrective actions for discrepancies"
+          },
+          {
+            "note": "CSR Team"
+          },
+          {
+            "from": "Teams",
+            "to": "DataProvider",
+            "action": "Notify of corrective actions completion [JIRA]"
+          },
+          {
+            "from": "Teams",
+            "to": "IPNDManager",
+            "action": "Create and submit reconciliation report [BI, JIRA]"
+          },
+          {
+            "note": "BI Team"
+          }
+        ]
+      }
+    ]
+  },
+
+  "TPGINT": {
+    "title": "TPGINT | IPND Operation Processes (IAS)",
+    "actors": {
+      "CombinedActor": "Processes",
+      "Teams": "Teams (Provisioning, CSR)"
+    },
+    "participants": {
+      "IPNDManager": "IPND Manager (System)",
+      "IPNDBroker": "IPND Broker (System)",
+      "IPND": "IPND System",
+      "IAS": "IAS System",
+      "DataProvider": "Data Provider (DP)"
+    },
+    "processes": [
+      {
+        "name": "Daily Feed Operation Process",
+        "steps": [
+          {
+            "note": "IAS System",
+            "from": "CombinedActor",
+            "to": "IPNDManager",
+            "action": "Send IPND file to IPND Manager"
+          },
+          {
+            "from": "IPNDManager",
+            "to": "IPND",
+            "action": "Receive and generate .err file"
+          },
+          {
+            "from": "IPND",
+            "to": "IAS",
+            "action": "Send .err file for investigation"
+          },
+          {
+            "from": "IAS",
+            "to": "DataProvider",
+            "action": "Extract .err file and take corrective actions"
+          },
+          {
+            "from": "DataProvider",
+            "to": "Teams",
+            "action": "Handle soft/hard errors and notify COPS"
+          },
+          {
+            "note": "CSR Team"
+          },
+          {
+            "from": "Teams",
+            "to": "DataProvider",
+            "action": "Notify of completion and close ticket [EMAIL]"
+          }
+        ]
+      },
+      {
+        "name": "Monthly Change Data Provider (CDP) Process",
+        "steps": [
+          {
+            "note": "IPND Manager System",
+            "from": "CombinedActor",
+            "to": "IPNDBroker",
+            "action": "Sends IPND file for the month"
+          },
+          {
+            "from": "IPNDBroker",
+            "to": "IAS",
+            "action": "Run report generation scripts [IAS]"
+          },
+          {
+            "from": "IAS",
+            "to": "DataProvider",
+            "action": "Generate IPND CDP Reports"
+          },
+          {
+            "from": "DataProvider",
+            "to": "Teams",
+            "action": "Investigate and take corrective actions for discrepancies"
+          },
+          {
+            "from": "Teams",
+            "to": "DataProvider",
+            "action": "Notify completion, resend records to IPND, and close ticket"
+          },
+          {
+            "note": "Provisioning Team"
+          }
+        ]
+      },
+      {
+        "name": "Half-Yearly Reconciliation Process",
+        "steps": [
+          {
+            "note": "IPND Manager System",
+            "from": "CombinedActor",
+            "to": "IPNDBroker",
+            "action": "Sends Half-Yearly IPND Extract files"
+          },
+          {
+            "from": "IPNDBroker",
+            "to": "IAS",
+            "action": "Compare file against IAS records"
+          },
+          {
+            "from": "IAS",
+            "to": "DataProvider",
+            "action": "Modify records and resend to IPND"
+          },
+          {
+            "from": "DataProvider",
+            "to": "Teams",
+            "action": "Take corrective actions, notify, and close reconciliation"
+          },
+          {
+            "from": "Teams",
+            "to": "IPNDManager",
+            "action": "Create and submit reconciliation report"
+          },
+          {
+            "note": "BI Team"
+          }
+        ]
+      }
+    ]
+  },
+
+  "TRNACT": {
+    "title": "TRNACT | IPND Operation Processes (iiNet Rumba)",
+    "actors": {
+      "CombinedActor": "Processes",
+      "Teams": "Teams (Provisioning)",
+      "CSR": "CSR Team"
+    },
+    "participants": {
+      "IPNDManager": "IPND Manager (System)",
+      "IPNDBroker": "IPND Broker (System)",
+      "IPND": "IPND System",
+      "DataProvider": "Data Provider (DP)"
+    },
+    "processes": [
+      {
+        "name": "Daily Feed Operation Process",
+        "steps": [
+          {
+            "note": "TRNACT System",
+            "from": "CombinedActor",
+            "to": "DataProvider",
+            "action": "Runs scripts to generate IPND files"
+          },
+          {
+            "from": "DataProvider",
+            "to": "IPNDBroker",
+            "action": "Generate IPND files for upload"
+          },
+          {
+            "from": "IPNDBroker",
+            "to": "IPND",
+            "action": "Upload IPND files to IPND System"
+          },
+          {
+            "from": "IPND",
+            "to": "DataProvider",
+            "action": "Generate .err files and send to Data Provider"
+          },
+          {
+            "from": "DataProvider",
+            "to": "Teams",
+            "action": "Take corrective actions [OMNI/CANMAN]"
+          },
+          {
+            "note": "CSR"
+          }
+        ]
+      },
+      {
+        "name": "Monthly Mini Reconciliation Process",
+        "steps": [
+          {
+            "note": "TRNACT System",
+            "from": "CombinedActor",
+            "to": "DataProvider",
+            "action": "Load unloaded IPNDUP files"
+          },
+          {
+            "from": "DataProvider",
+            "to": "DataProvider",
+            "action": "Load IPND snapshot and Generate report"
+          },
+          {
+            "from": "DataProvider",
+            "to": "DataProvider",
+            "action": "Compare sent vs should be sent IPND files"
+          },
+          {
+            "from": "DataProvider",
+            "to": "Teams",
+            "action": "Take corrective actions and resend [IPND]"
+          },
+          {
+            "note": "Provisioning Team"
+          }
+        ]
+      },
+      {
+        "name": "Monthly Change Data Provider (CDP) Process",
+        "steps": [
+          {
+            "note": "IPND Manager System",
+            "from": "CombinedActor",
+            "to": "IPNDBroker",
+            "action": "Sends IPND CDP Report"
+          },
+          {
+            "from": "IPNDBroker",
+            "to": "DataProvider",
+            "action": "Receives CDP report"
+          },
+          {
+            "from": "DataProvider",
+            "to": "Teams",
+            "action": "Download and send IPND CDP Reports to Support [TRANSACT]"
+          },
+          {
+            "note": "CSR \\ Frontline Agent"
+          },
+          {
+            "from": "Teams",
+            "to": "DataProvider",
+            "action": "Compare reports and create summary of findings"
+          },
+          {
+            "from": "DataProvider",
+            "to": "Teams",
+            "action": "Take corrective actions and submit [TRANSACT]"
+          }
+        ]
+      },
+      {
+        "name": "Half-Yearly Reconciliation Process",
+        "steps": [
+          {
+            "note": "External IPND System",
+            "from": "CombinedActor",
+            "to": "IPNDBroker",
+            "action": "Upload IPNDRU files for reconciliation"
+          },
+          {
+            "from": "IPNDBroker",
+            "to": "DataProvider",
+            "action": "Import IPND files into database [TRANSACT]"
+          },
+          {
+            "from": "DataProvider",
+            "to": "Teams",
+            "action": "Request service numbers for reconciliation [KENAN/RUMBA]"
+          },
+          {
+            "from": "Teams",
+            "to": "DataProvider",
+            "action": "Compare results"
+          },
+          {
+            "from": "DataProvider",
+            "to": "Teams",
+            "action": "Take corrective actions [OMNI]"
+          },
+          {
+            "from": "Teams",
+            "to": "CSR",
+            "action": "Investigate and fix discrepancies"
+          },
+          {
+            "from": "DataProvider",
+            "to": "Teams",
+            "action": "Create Half-Yearly Reconciliation Report"
+          }
+        ]
+      }
+    ]
+  },
+
+  "VFONEN": {
+    "title": "IPND Siebel Feed and CDP Reconciliation Process",
+    "actors": {
+      "Teams": "Teams (Siebel L2, ETL L2, COPS Admin)"
+    },
+    "participants": {
+      "Siebel": "Siebel",
+      "ETL": "ETL",
+      "IPND": "IPND",
+      "Telstra": "Telstra"
+    },
+    "processes": [
+      {
+        "name": "Siebel Daily Feed Operation",
+        "steps": [
+          {
+            "note": "Start",
+            "from": "Siebel",
+            "to": "ETL",
+            "action": "Extract and validate customer data"
+          },
+          {
+            "from": "ETL",
+            "to": "ETL",
+            "action": "Process and validate IPND data"
+          },
+          {
+            "from": "ETL",
+            "to": "IPND",
+            "action": "Upload validated records to IPND"
+          },
+          {
+            "from": "IPND",
+            "to": "Telstra",
+            "action": "Process IPND files to Telstra"
+          },
+          {
+            "from": "Telstra",
+            "to": "IPND",
+            "action": "Receive error .err files"
+          },
+          {
+            "from": "IPND",
+            "to": "ETL",
+            "action": "Download IPND .err files"
+          },
+          {
+            "from": "ETL",
+            "to": "Teams",
+            "action": "Share ETL and IPND errors with relevant teams"
+          },
+          {
+            "note": "Siebel L2"
+          },
+          {
+            "from": "Teams",
+            "to": "Siebel",
+            "action": "Fix hard errors and create PKE for hard errors that cannot be fixed"
+          },
+          {
+            "note": "COPS Admin"
+          },
+          {
+            "from": "Teams",
+            "to": "Siebel",
+            "action": "Correct errors and contact customer if required"
+          }
+        ]
+      },
+      {
+        "name": "CDP Monthly Reconciliation Process",
+        "steps": [
+          {
+            "from": "IPND",
+            "to": "ETL",
+            "action": "Download CDP file from IPND\\Telstra"
+          },
+          {
+            "note": "Start \\ Siebel L2"
+          },
+          {
+            "from": "Teams",
+            "to": "ETL",
+            "action": "Download CDP files"
+          },
+          {
+            "from": "Teams",
+            "to": "Siebel",
+            "action": "Prepare reconciliation summary"
+          },
+          {
+            "from": "Siebel",
+            "to": "IPND",
+            "action": "Resubmit customer data to IPND"
+          },
+          {
+            "note": "Siebel L2"
+          },
+          {
+            "from": "Teams",
+            "to": "ETL",
+            "action": "Verify second day reconciliation report"
+          },
+          {
+            "from": "Teams",
+            "to": "Siebel",
+            "action": "Verify second day reconciliation report"
+          },
+          {
+            "from": "Teams",
+            "to": "Teams",
+            "action": "Share reconciliation report with VHA"
+          },
+          {
+            "note": "VHA Service Manager"
+          },
+          {
+            "from": "Teams",
+            "to": "IPND",
+            "action": "Submit report to IPND"
+          }
+        ]
+      }
+    ]
+  },
+
+
+  "VFONW": {}
+
+
+
+}

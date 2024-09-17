@@ -1,0 +1,20 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "/Users/peterjaber/Desktop/Easyflow.io/Code/nocobase-samples/storage/logs/main/custom-request/.71fe7602cf8ddeb1d6bcffbbb24b53e72b4efcb8-audit.json",
+    "files": [
+        {
+            "date": 1726371844001,
+            "name": "/Users/peterjaber/Desktop/Easyflow.io/Code/nocobase-samples/storage/logs/main/custom-request/2024-09-15.log",
+            "hash": "21e0ac10d106f2dbaeea1aa99cd38e33af8c6e4774650fc0ab11de69d20d2d89"
+        },
+        {
+            "date": 1726420110504,
+            "name": "/Users/peterjaber/Desktop/Easyflow.io/Code/nocobase-samples/storage/logs/main/custom-request/2024-09-16.log",
+            "hash": "e73d547ff686a4d9079d4bd947f8951e595a12a7446afe599d638acffb439d97"
+        }
+    ],
+    "hashType": "sha256"
+}

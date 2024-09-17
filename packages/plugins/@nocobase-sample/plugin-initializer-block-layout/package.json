@@ -1,0 +1,12 @@
+{
+  "name": "@nocobase-sample/plugin-initializer-block-layout",
+  "version": "0.1.0",
+  "main": "dist/server/index.js",
+  "devDependencies": {
+  },
+  "peerDependencies": {
+    "@nocobase/client": "1.x",
+    "@nocobase/server": "1.x",
+    "@nocobase/test": "1.x"
+  }
+}

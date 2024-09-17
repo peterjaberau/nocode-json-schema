@@ -1,0 +1,1 @@
+export { default } from '@nocobase-sample/nb-workflow-json-extract/client';

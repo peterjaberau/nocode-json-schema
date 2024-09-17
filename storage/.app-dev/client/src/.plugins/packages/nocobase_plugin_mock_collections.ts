@@ -1,0 +1,1 @@
+export { default } from '@nocobase/plugin-mock-collections/client';
