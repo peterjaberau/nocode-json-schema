@@ -1,72 +1,63 @@
+# Dependencies
 node_modules/
-lib/
-esm/
-es/
-.env
-.env.e2e
-.DS_Store
-yarn-error.log
-lerna-debug.log
-/.vscode
-/.idea
-*.sqlite
-coverage
-.umi
-.umi-production
-/uploads
-.env.test
-docs-dist/
+.pnp/
+.pnp.js
 .npmrc
-dist/
-docker/**/storage
-cache/diskstore-*
-*.nbdump
-storage/duplicator/*
-storage/backups/*
-**/.dumi/tmp
-**/.dumi/tmp-test
-**/.dumi/tmp-production
-packages/core/client/docs/contributing.md
-packages/core/app/client/src/.plugins
-storage/plugins
-storage/tar
-storage/tmp
-storage/app.watch.ts
-storage/logs-e2e
-storage/uploads-e2e
-storage/.pm2-*
-tsconfig.paths.json
-/playwright
-/storage/playwright
-.swc
+yarn-error.log
 ncc-cache/
 yarn--**
 v8-compile-cache-**
-vitest.config.mts.timestamp-*
 
-# local env files
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-
-# dependencies
-node_modules
-.pnp
-.pnp.js
-
-# testing
-coverage
-
-# next.js
+# Build directories and files
+lib/
+esm/
+es/
+dist/
+coverage/
+docs-dist/
 .next/
 out/
-build
-
-# misc
+build/
+.playwright/
+.vscode/
+.idea/
 .DS_Store
+*.sqlite
 *.pem
-/mock/plantuml/
-!/node_modules/
+*.nbdump
+
+# Temporary and cache files
+.umi/
+.umi-production/
+.npmrc
+/cache/diskstore-*
+/storage/duplicator/*
+/storage/backups/*
+/storage/plugins/
+/storage/tar/
+/storage/tmp/
+/storage/app.watch.ts
+/storage/logs-e2e/
+/storage/uploads-e2e/
+/storage/.pm2-*
+docker/**/storage
+tsconfig.paths.json
+
+# Test-related files
+.env.test
+.env.e2e
+.env.test.local
+mock/plantuml/
 !/mock/plantuml/
+
+# Local env files
+.env
+.env.local
+.env.development.local
+.env.production.local
+.env.e2e
+
+# Logs
+lerna-debug.log
+
+# Git a
