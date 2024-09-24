@@ -5,5 +5,7 @@
   "Color": "Color",
   "Small": "Small",
   "Middle": "Middle",
-  "Large": "Large"
+  "Large": "Large",
+
+  "JsonFieldComponent": "Json Field"
 }

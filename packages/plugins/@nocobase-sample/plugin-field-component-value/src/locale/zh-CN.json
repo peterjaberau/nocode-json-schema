@@ -5,5 +5,7 @@
   "Color": "颜色",
   "Small": "小",
   "Middle": "中",
-  "Large": "大"
+  "Large": "大",
+
+  "JsonFieldComponent": "Json Field"
 }

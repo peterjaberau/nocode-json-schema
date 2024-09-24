@@ -1,0 +1,19 @@
+{
+  "name": "@nocobase-sample/plugin-custom-query-builder",
+  "version": "0.1.0",
+
+  "displayName": "-- Add QueryBuilder",
+
+  "main": "dist/server/index.js",
+  "devDependencies": {
+    "@react-awesome-query-builder/antd": "6.6.3",
+    "react-querybuilder": "7.6.1",
+    "@react-querybuilder/antd": "7.6.1",
+    "antd": "5.x"
+  },
+  "peerDependencies": {
+    "@nocobase/client": "1.x",
+    "@nocobase/server": "1.x",
+    "@nocobase/test": "1.x"
+  }
+}

@@ -1,3 +1,10 @@
+# Delete nocobase cache
+yarn nocobase clean
+# Remove dependencies
+yarn rimraf -rf node_modules
+
+
+
 # NocoBase Plugin Samples
 
 [Document](https://docs.nocobase.com/plugin-samples)

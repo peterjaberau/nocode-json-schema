@@ -1,6 +1,6 @@
 import { Plugin } from '@nocobase/server';
 
-export class PluginJsonViewerServer extends Plugin {
+export class PluginCustomQueryBuilderServer extends Plugin {
   async afterAdd() {}
 
   async beforeLoad() {}
@@ -16,4 +16,4 @@ export class PluginJsonViewerServer extends Plugin {
   async remove() {}
 }
 
-export default PluginJsonViewerServer;
+export default PluginCustomQueryBuilderServer;

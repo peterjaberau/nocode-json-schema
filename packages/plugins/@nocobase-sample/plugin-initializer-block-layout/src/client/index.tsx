@@ -273,9 +273,9 @@ export class PluginInitializerBlockClient extends Plugin {
   async load() {
 
     this.app.addComponents({
-      LayoutComponent, LayoutComponentBlock, LayoutInitializerComponent, WidgetComponent, WidgetInitializerComponent,
+      LayoutComponent, LayoutComponentBlock, LayoutInitializerComponent,
+      WidgetComponent, WidgetInitializerComponent,
       SchemaInitializerBasic, SchemaBasicComponent
-
     })
     this.app.schemaSettingsManager.add(layoutSettings)
     this.app.schemaSettingsManager.add(widgetSettings)

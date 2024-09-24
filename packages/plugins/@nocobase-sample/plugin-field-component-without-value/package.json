@@ -1,6 +1,7 @@
 {
   "name": "@nocobase-sample/plugin-field-component-without-value",
   "version": "0.1.0",
+  "displayName": "-- Fields without value",
   "main": "dist/server/index.js",
   "dependencies": {},
   "peerDependencies": {

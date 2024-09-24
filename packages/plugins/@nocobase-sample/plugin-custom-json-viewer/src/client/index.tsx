@@ -5,7 +5,7 @@ import { useCollectionFn } from './datasources/useCollection';
 import { JsonViewerSchema, JsonViewer, jsonViewerInitializerItem, jsonViewerSettings, JsonViewerProps} from './components/JsonViewer';
 
 
-export class PluginDataBlockInitializerClient extends Plugin {
+export class PluginJsonViewerClient extends Plugin {
   async load() {
     this.app.addComponents({ JsonViewer });
     this.app.addScopes({ useCollectionFn });
@@ -16,4 +16,4 @@ export class PluginDataBlockInitializerClient extends Plugin {
   }
 }
 
-export default PluginDataBlockInitializerClient;
+export default PluginJsonViewerClient;

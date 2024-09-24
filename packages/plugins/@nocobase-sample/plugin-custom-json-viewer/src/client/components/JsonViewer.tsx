@@ -13,8 +13,6 @@ import JsonView from 'react18-json-view';
 import { useT } from '../locale'
 import { BlockName, BlockNameLowercase } from '../constants';
 
-
-
 export interface JsonViewerProps {
   [key: string]: any;
 }
@@ -105,13 +103,10 @@ export const JsonViewer: FC<JsonViewerProps> = withDynamicSchemaProps((props) =>
 
   const app = useApp();
 
-
-
   const blockItems = React.useMemo(
     () => extractItems(app.schemaInitializerManager.get('BlockInitializers').options.items),
     [app.schemaInitializerManager.get('BlockInitializers').options.items]
     );
-
 
   return <JsonView
     src={{
