@@ -1,10 +1,51 @@
 import React, { FC } from 'react';
-import { ArrayItems } from '@formily/antd-v5';
+import {
+  DetailsBlockProvider,
+  ISchema,
+  Plugin,
+  SchemaComponent, useAssociationName, useDetailsBlockContext,
+  useDetailsPaginationProps,
+  useDetailsWithPaginationDecoratorProps,
+  useDetailsWithPaginationProps,
+} from '@nocobase/client';
+
+
+// import * as FormilyComponents from '@formily/antd-v5';
+
+import {
+
+  Form,
+  FormItem,
+  DatePicker,
+  Checkbox,
+  Cascader,
+  Editable,
+  Input,
+  NumberPicker,
+  Switch,
+  Password,
+  PreviewText,
+  Radio,
+  Reset,
+  Select,
+  Space,
+  Submit,
+  TimePicker,
+  Transfer,
+  TreeSelect,
+  Upload,
+  FormGrid,
+  FormLayout,
+  FormTab,
+  FormCollapse,
+  ArrayTable,
+  ArrayCards
+} from '@formily/antd-v5';
+
 
 import {
   FilterBlockType,
   removeNullCondition,
-  SchemaComponent,
   SchemaInitializerItemType,
   SchemaSettings,
   SchemaSettingsBlockHeightItem,
@@ -22,12 +63,14 @@ import {
   useSchemaInitializerItem, useSortFields, useTableBlockContext,
   withDynamicSchemaProps,
 } from '@nocobase/client';
-import { BlockPlaygroundRecordName, BlockPlaygroundRecordLowercase } from '../constants';
+import { BlockPlaygroundDetailsName, BlockPlaygroundDetailsLowercase } from '../constants';
 import { CodeOutlined } from '@ant-design/icons';
 import { useCollectionRecord, CollectionRecordProvider, useCollectionParentRecordData, useCollectionParentRecord } from '@nocobase/client';
-import { ISchema, useField, useFieldSchema } from '@formily/react';
+import { useField, useFieldSchema } from '@formily/react';
 import { useTranslation } from 'react-i18next';
 import _ from 'lodash';
+import { uid } from '@formily/shared';
+import { ArrayItems } from '@formily/antd-v5';
 
 const commonSettingsItems: SchemaSettingsItemType[] = [
   {
@@ -82,16 +125,13 @@ const commonSettingsItems: SchemaSettingsItemType[] = [
 ];
 
 
-export interface PlaygroundRecordProps {
-  collectionName: string;
-  data?: any[];
-  loading?: boolean;
-  // children?: React.ReactNode;
-  // [key: string]: any;
+export interface PlaygroundDetailsProps {
+  dataSource: string; collectionName?: string; association?: string; templateSchema?: ISchema; isCurrent?: boolean,
+  data?: any;
 }
 
-export const playgroundRecordSettings = new SchemaSettings({
-  name: `blockSettings:${BlockPlaygroundRecordLowercase}`,
+export const playgroundDetailsSettings = new SchemaSettings({
+  name: `blockSettings:${BlockPlaygroundDetailsLowercase}`,
   items: [
     {
       name: 'EditBlockTitle',
@@ -374,86 +414,119 @@ export const playgroundRecordSettings = new SchemaSettings({
   ]
 })
 
-export function usePlaygroundRecordProps(): PlaygroundRecordProps {
-  const collection = useCollection();
-  const { data, loading } = useDataBlockRequest<any[]>();
+export function usePlaygroundDetailsProps(): PlaygroundDetailsProps {
+
+  const recordData = useCollectionRecordData();
+  const collection = useCollection()
 
   return {
     collectionName: collection.name,
-    data: data?.data,
-    loading: loading
+    dataSource: 'main',
+    isCurrent: true,
+    data: recordData,
   }
 }
 
 
-export const getPlaygroundRecordSchema = ({ dataSource = 'main', collection }) => {
+/**
+ * isCurrent: If true, it means that the currently created block record is the record returned by useRecord
+ */
+export function getPlaygroundDetailsSchema(options: { dataSource: string; collectionName?: string; association?: string; templateSchema?: ISchema; isCurrent?: boolean, data?: any }) {
+  const { collectionName, dataSource = 'main', association, templateSchema, data } = options;
+  const resourceName = association || collectionName;
+  const isCurrentObj = options.isCurrent ? { 'x-is-current': true } : {};
+  if (!dataSource) {
+    throw new Error('dataSource are required');
+  }
+
   return {
     type: 'void',
-    'x-decorator': 'DataBlockProvider',
-    "x-toolbar": "BlockSchemaToolbar",
+    'x-decorator': 'DetailsBlockProvider',
+    'x-use-decorator-props': 'useDetailsDecoratorProps',
     'x-decorator-props': {
       dataSource,
-      collection,
-      action: 'list',
+      collection: collectionName,
+      association,
+      readPretty: true,
+      action: 'get',
     },
-    'x-settings': playgroundRecordSettings.name,
+    "x-toolbar": "BlockSchemaToolbar",
+    'x-settings': playgroundDetailsSettings.name,
     'x-component': 'CardItem',
+    ...isCurrentObj,
     properties: {
-      [BlockPlaygroundRecordLowercase]: {
+      // [BlockPlaygroundDetailsLowercase]: {
+      [uid()]: {
         'type': 'void',
-        'x-component': BlockPlaygroundRecordName,
-        'x-use-component-props': 'usePlaygroundRecordProps',
+        'x-component': BlockPlaygroundDetailsName,
+        'x-use-component-props': 'usePlaygroundDetailsProps',
       }
     }
   }
 }
 
 
-export const playgroundRecordInitializerItem: SchemaInitializerItemType = {
-  name: BlockPlaygroundRecordLowercase,
+export const playgroundDetailsInitializerItem: SchemaInitializerItemType = {
+  name: BlockPlaygroundDetailsLowercase,
   Component: 'DataBlockInitializer',
   useComponentProps() {
     const { insert } = useSchemaInitializer();
+    const association = useAssociationName();
+
+    const options = (item) => {
+      return association
+        ? { association, dataSource: item.dataSource, isCurrent: true }
+        : { collectionName: item.collectionName || item.name, dataSource: item.dataSource }
+    }
+
+
     return {
-      title: BlockPlaygroundRecordName,
+      title: BlockPlaygroundDetailsName,
       icon: <CodeOutlined />,
-      componentType: BlockPlaygroundRecordName,
+      componentType: BlockPlaygroundDetailsName,
       onClick: ({ item }) => {
-        insert(getPlaygroundRecordSchema({ dataSource: item.dataSource, collection: item.name }))
+        insert(getPlaygroundDetailsSchema(options(item)))
       }
 
     };
-
-
   },
 }
 
-const myrecord = {
-  "createdAt": "2024-09-12T21:38:01.539Z",
-  "updatedAt": "2024-09-12T22:41:49.435Z",
-  "host": "www.wrike.com",
-  "id": 1,
-  "identifier": "APP_WRIKE",
-  "inDev": true,
-  "inProd": true,
-  "name": "Wrike",
-  "notes": "Paid Plan Required, Jira Issue Link: https://cloudanalyser.atlassian.net/browse/EC-160",
-  "pathsCount": 1,
-  "previewIcon": "https://easyflow-assets.s3-us-west-2.amazonaws.com/stencils/APP_WRIKE_128x128.svg",
-  "securityType": null,
-  "url": "https://www.wrike.com/vas/",
-  "createdById": 1,
-  "updatedById": 1
-}
 
-
-export const PlaygroundRecord: FC<PlaygroundRecordProps> = withDynamicSchemaProps(({ collectionName, data }) => {
+export const PlaygroundDetails: FC<PlaygroundDetailsProps> = withDynamicSchemaProps(({ collectionName, data, dataSource, templateSchema, isCurrent, association }) => {
   // const data = useCollectionRecordData();
   // const record = useCollectionRecord();
 
   return (
     // <CollectionRecordProvider record={myrecord}>
       <div>
+        <SchemaComponent schema={data.content} components={{ Form,
+          FormItem,
+          DatePicker,
+          Checkbox,
+          Cascader,
+          Editable,
+          Input,
+          NumberPicker,
+          Switch,
+          Password,
+          PreviewText,
+          Radio,
+          Reset,
+          Select,
+          Space,
+          Submit,
+          TimePicker,
+          Transfer,
+          TreeSelect,
+          Upload,
+          FormGrid,
+          FormLayout,
+          FormTab,
+          FormCollapse,
+          ArrayTable,
+          ArrayCards  }} />
+
         <div>collection: {collectionName}</div>
         <div>data list: <pre>{JSON.stringify(data, null, 2)}</pre></div>
         {/*<div>record: {JSON.stringify(record)}</div>*/}
@@ -462,4 +535,8 @@ export const PlaygroundRecord: FC<PlaygroundRecordProps> = withDynamicSchemaProp
   )
 
 
-}, { displayName: BlockPlaygroundRecordName })
+}, { displayName: BlockPlaygroundDetailsName })
+
+
+
+

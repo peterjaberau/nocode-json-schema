@@ -9,3 +9,9 @@ export const BlockPlaygroundLowercase = BlockPlaygroundName.toLowerCase();
 
 export const BlockPlaygroundRecordName = 'PlaygroundRecord';
 export const BlockPlaygroundRecordLowercase = BlockPlaygroundRecordName.toLowerCase();
+
+export const BlockPlaygroundSingleRecordName = 'PlaygroundSingleRecord';
+export const BlockPlaygroundSingleRecordLowercase = BlockPlaygroundSingleRecordName.toLowerCase();
+
+export const BlockPlaygroundDetailsName = 'PlaygroundDetails';
+export const BlockPlaygroundDetailsLowercase = BlockPlaygroundDetailsName.toLowerCase();
