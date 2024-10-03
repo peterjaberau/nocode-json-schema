@@ -7,8 +7,5 @@
  * For more information, please refer to: https://www.nocobase.com/agreement.
  */
 
-import { parseDatabaseOptionsFromEnv } from '@nocobase/database';
-
-export async function parseDatabaseOptions() {
-  return await parseDatabaseOptionsFromEnv();
-}
+export * from './CalendarBlockInitializer';
+export * from './RecordAssociationCalendarBlockInitializer';

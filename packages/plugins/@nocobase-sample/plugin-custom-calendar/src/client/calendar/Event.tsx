@@ -7,6 +7,12 @@
  * For more information, please refer to: https://www.nocobase.com/agreement.
  */
 
-export default {
-  prefix: process.env.API_BASE_PATH,
-};
+import { observer } from '@formily/react';
+import React from 'react';
+
+export const Event = observer(
+  (props) => {
+    return <>{props.children}</>;
+  },
+  { displayName: 'Event' },
+);

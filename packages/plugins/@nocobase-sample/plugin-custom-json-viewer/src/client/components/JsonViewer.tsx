@@ -53,6 +53,7 @@ export interface JsonViewerProps {
   collapseStringsAfterLength?: number
   collapseStringMode?: 'address' | 'word' | 'directly'
   collapsed?: boolean | number
+  theme?: 'default' | 'github' | 'vscode' | 'atom' | 'winter-is-coming'
   [key: string]: any
 }
 
@@ -128,16 +129,61 @@ export const collapsedSchemaSettingsItem: SchemaSettingsItemType = {
   },
 };
 
-export const displaySizeSchemaSettingsItem: SchemaSettingsItemType = {
+export const displaySizeModalSchemaSettingsItem: SchemaSettingsItemType = {
   name: 'displaySize',
-  type: 'switch',
+  type: 'actionModal', //modal (cancel, ok)
   useComponentProps() {
     const filedSchema = useFieldSchema();
     const { deepMerge } = useDesignable();
 
     return {
       title: 'Display Size',
-      checked: !!filedSchema['x-decorator-props']?.[BlockNameLowercase]?.displaySize,
+      schema: {
+        type: 'object',
+        title: 'Edit display size',
+        properties: {
+          displaySize: {
+            title: 'Display Size',
+            type: 'boolean',
+            default: filedSchema['x-decorator-props']?.[BlockNameLowercase]?.displaySize,
+            'x-decorator': 'FormItem',
+            'x-component': 'Checkbox',
+          },
+        },
+      },
+      onSubmit({ displaySize }: any) {
+        deepMerge({
+          'x-uid': filedSchema['x-uid'],
+          'x-decorator-props': {
+            ...filedSchema['x-decorator-props'],
+            [BlockNameLowercase]: {
+              ...filedSchema['x-decorator-props']?.[BlockNameLowercase],
+              displaySize,
+            },
+          },
+        })
+      }
+    };
+  },
+};
+
+export const themeSchemaSettingsItem: SchemaSettingsItemType = {
+  name: 'theme',
+  type: 'select',
+  useComponentProps() {
+    const filedSchema = useFieldSchema();
+    const { deepMerge } = useDesignable();
+
+    return {
+      title: 'Theme',
+      options: [
+        { label: 'Default', value: 'default' },
+        { label: 'Github', value: 'github' },
+        { label: 'VSCode', value: 'vscode' },
+        { label: 'Atom', value: 'atom' },
+        { label: 'Winter', value: 'winter-is-coming' },
+      ],
+      value: filedSchema['x-decorator-props']?.[BlockNameLowercase]?.theme || 'default',
       onChange(v) {
         deepMerge({
           'x-uid': filedSchema['x-uid'],
@@ -145,7 +191,7 @@ export const displaySizeSchemaSettingsItem: SchemaSettingsItemType = {
             ...filedSchema['x-decorator-props'],
             [BlockNameLowercase]: {
               ...filedSchema['x-decorator-props']?.[BlockNameLowercase],
-              displaySize: v,
+              theme: v,
             },
           },
         })
@@ -167,7 +213,8 @@ export const jsonViewerSettings = new SchemaSettings({
       type: 'divider'
     },
     collapsedSchemaSettingsItem,
-    displaySizeSchemaSettingsItem,
+    displaySizeModalSchemaSettingsItem,
+    themeSchemaSettingsItem,
     {
       type: 'remove',
       name: 'remove'
@@ -312,6 +359,7 @@ export const JsonViewer: FC<JsonViewerProps> = withDynamicSchemaProps((props) =>
     collapseStringsAfterLength = 100,
     collapseStringMode = 'word',
     collapsed = false,
+    theme = 'default',
     ...rest
   } = props;
 
@@ -345,7 +393,7 @@ export const JsonViewer: FC<JsonViewerProps> = withDynamicSchemaProps((props) =>
 
   const { t } = useTranslation();
   const options = useContext(SchemaOptionsContext);
-  const { theme } = useGlobalTheme();
+  const { theme: globalTheme } = useGlobalTheme();
   const useStylesVal = useStyles();
 
     const blockItems = React.useMemo(
@@ -364,7 +412,7 @@ export const JsonViewer: FC<JsonViewerProps> = withDynamicSchemaProps((props) =>
         routerManager: _.keys(app.router.getRoutes()).sort()
       },
       use: {
-        theme: _.pick({...theme}, ['token', 'name']),
+        theme: _.pick({...globalTheme}, ['token', 'name']),
         useStyles: _.pick({...useStylesVal}, ['styles', 'theme', 'prefixCls']),
       },
 
@@ -465,6 +513,8 @@ export const JsonViewer: FC<JsonViewerProps> = withDynamicSchemaProps((props) =>
       application: app
     }}
     displaySize={displaySize}
+    theme={theme}
+    enableClipboard={true}
     collapseObjectsAfterLength={collapseObjectsAfterLength}
     collapseStringsAfterLength={collapseStringsAfterLength}
     collapseStringMode={collapseStringMode}

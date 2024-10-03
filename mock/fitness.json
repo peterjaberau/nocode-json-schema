@@ -1,0 +1,98 @@
+{
+  "scoreOptions": [
+  ],
+  "data": [
+    {
+      "group": "Physique",
+      "id": 1,
+      "scope": "bodyImage",
+      "scoreOptions": [
+        "bodyImageFit",
+        "bodyImageMuscular",
+        "bodyImageNormal",
+        "bodyImageObeise",
+        "bodyImageOverweight",
+        "bodyImageSkinny"
+      ],
+      "level-scope-fk": null
+    },
+    {
+      "group": "Physique",
+      "id": 2,
+      "scope": "activityLevel",
+      "scoreOptions": [
+
+      ],
+      "level-scope-fk": null
+    },
+    {
+      "group": "Nutrition",
+      "id": 3,
+      "scope": "foodPreparation",
+      "scoreOptions": [
+
+      ],
+      "level-scope-fk": null
+    },
+    {
+      "group": "Nutrition",
+      "id": 4,
+      "scope": "numberOfMeals",
+      "scoreOptions": [
+
+      ],
+      "level-scope-fk": null
+    },
+    {
+      "group": "Nutrition",
+      "id": 5,
+      "scope": "foodQuality",
+      "scoreOptions": [
+
+      ],
+      "level-scope-fk": null
+    },
+    {
+      "group": "Lifestyle",
+      "id": 6,
+      "scope": "workType",
+      "scoreOptions": [
+
+      ],
+      "level-scope-fk": null
+    },
+    {
+      "group": "Lifestyle",
+      "id": 7,
+      "scope": "timeFlexibility",
+      "scoreOptions": [
+
+      ],
+      "level-scope-fk": null
+    },
+    {
+      "group": "Lifestyle",
+      "id": 8,
+      "scope": "stressLevel",
+      "scoreOptions": [
+
+      ],
+      "level-scope-fk": null
+    },
+    {
+      "group": "Lifestyle",
+      "id": 9,
+      "scope": "sleepQuality",
+      "scoreOptions": [
+
+      ],
+      "level-scope-fk": null
+    }
+  ],
+  "meta": {
+    "count": 9,
+    "page": 0,
+    "pageSize": 100,
+    "totalPage": 1
+  }
+}
